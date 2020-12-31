@@ -71,7 +71,7 @@ int main()
 					  {0, 0, 0, 0, 0, 0, 0, 7, 4},
 					  {0, 0, 5, 2, 0, 6, 3, 0, 0}};
 
-	cout << "input grid: " << endl;
+	cout << "input grid:" << endl << endl;
 	printGrid(grid);
 
 	for (int r = 0; r < N; r++)
@@ -83,7 +83,7 @@ int main()
 			domains[r][c] = calcDomain(grid, r, c);
 
 	if (backtracking(grid, true, bt, varheu, valheu) == true) {
-		cout << "output grid: " << endl;
+		cout << "output grid: " << endl<< endl;
 		printGrid(grid);
 	}
 	else
