@@ -25,6 +25,7 @@ bool btAssign(int grid[N][N], int row, int col, int num);
 bool isSafe(int grid[N][N], int row, int col, int num);
 bool UsedInRow(int grid[N][N], int row, int num);
 bool UsedInCol(int grid[N][N], int col, int num);
+bool UsedInSquare(int grid[N][N], int row, int col, int num);
 
 bool isConflicting(int grid[N][N]);
 bool isComplete(int grid[N][N]);
@@ -46,10 +47,26 @@ bool UsedInCol(int grid[N][N], int col, int num)
     return false;
 }
 
+bool UsedInSquare(int grid[N][N], int row, int col, int num)
+{
+    row = row - row % 3;
+    col = col - col % 3;
+    for (int i = 0; i < sqrt(N); i++)
+    {
+        for (int j = 0; j < sqrt(N); j++)
+        {
+            if (grid[row + i][col + j] == num)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool isSafe(int grid[N][N], int row, int col, int num)
 {
-    return !UsedInRow(grid, row, num) && !UsedInCol(grid, col, num) &&
-           grid[row][col] == UNASSIGNED;
+    return !UsedInRow(grid, row, num) && !UsedInCol(grid, col, num) && !UsedInSquare(grid, row, col, num) && grid[row][col] == UNASSIGNED;
 }
 
 bool isSafeToAssign(int grid[N][N], int row, int col, int num, int typeOfBacktrack)
@@ -401,6 +418,24 @@ bool isConflicting(int grid[N][N])
             if (count > 1)
                 return true;
         }
+        // check square wise
+        for (int k = 0; k < sqrt(N); k++)
+        {
+            for (int l = 0; l < sqrt(N); l++)
+            {
+                int count = 0;
+                for (int r = 0; r < sqrt(N); r++)
+                {
+                    for (int c = 0; c < sqrt(N); c++)
+                    {
+                        if (i == grid[k*3 + r][l*3 + c])
+                            count++;
+                    }
+                }
+                if (count > 1)
+                    return true;
+            }
+        }
     }
     return false;
 }
@@ -420,12 +455,14 @@ void printGrid(int grid[N][N])
     {
         if ((row) % int(sqrt(N)) == 0 && row != 0)
         {
-            for (int i = 0; i < N; i++) cout << "--";
+            for (int i = 0; i < N; i++)
+                cout << "--";
             cout << endl;
         }
         for (int col = 0; col < N; col++)
         {
-            if((col) % int(sqrt(N)) == 0 && col != 0) cout << "|";
+            if ((col) % int(sqrt(N)) == 0 && col != 0)
+                cout << "|";
             // if(col!=N-1) cout << grid[row][col] << " ";
             // else cout << grid[row][col];
             cout << grid[row][col] << " ";
